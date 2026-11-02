@@ -4,8 +4,8 @@ import (
 	"context"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/lynx-go/lynx/eventbus"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx/eventbus"
+	"github.com/lynxland/x/log"
 )
 
 // Publisher publishes domain events to a logical topic.
@@ -39,7 +39,10 @@ func (b *Broker) Publish(ctx context.Context, topicName TopicName, eventName Eve
 	if err != nil {
 		return err
 	}
-	return b.bus.Publish(ctx, topicName.String(), payload, opts...)
+	// v1.17.0 起 Publish 返回消息 ID（与消费端 event.id 对账用）；Broker
+	// 的门面签名保持 error，ID 当前无消费方，不外露。
+	_, err = b.bus.Publish(ctx, topicName.String(), payload, opts...)
+	return err
 }
 
 // HandlerFunc handles a decoded CloudEvent.

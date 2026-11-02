@@ -9,19 +9,19 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	apipb "github.com/lynx-go/lynx-clean-template/genproto/api/v1"
-	sharedpb "github.com/lynx-go/lynx-clean-template/genproto/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/events"
-	groupsrepo "github.com/lynx-go/lynx-clean-template/internal/domain/groups/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users"
-	usersrepo "github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/contexts"
-	apierrors "github.com/lynx-go/lynx-clean-template/pkg/errors"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen/uuid"
-	"github.com/lynx-go/lynx-clean-template/pkg/jwtparser"
+	apipb "github.com/lynxland/lynx-clean-template/genproto/api/v1"
+	sharedpb "github.com/lynxland/lynx-clean-template/genproto/shared"
+	"github.com/lynxland/lynx-clean-template/internal/domain/events"
+	groupsrepo "github.com/lynxland/lynx-clean-template/internal/domain/groups/repo"
+	"github.com/lynxland/lynx-clean-template/internal/domain/shared"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users"
+	usersrepo "github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/contexts"
+	apierrors "github.com/lynxland/lynx-clean-template/pkg/errors"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen/uuid"
+	"github.com/lynxland/lynx-clean-template/pkg/jwtparser"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 )
@@ -216,7 +216,6 @@ func (uc *Account) CreateUser(ctx context.Context, req *apipb.SignUpRequest, isS
 		uc.logger.ErrorContext(ctx, "failed to publish users:created event", err)
 	}
 
-
 	return &apipb.SignUpResponse{
 		UserInfo: NewProtoUserFromUser(user),
 	}, nil
@@ -325,20 +324,20 @@ func (uc *Account) sendSignUpEmailCode(ctx context.Context, user *usersrepo.User
 
 	// Create verification record
 	verifyCode := &usersrepo.EmailVerificationCode{
-		ID:          idgen.BigID(),
-		UserID:      user.ID,
-		Email:       user.Email,
-		Purpose:     usersrepo.VerificationPurposeSignUp,
-		CodeHash:    codeHash,
-		Status:      usersrepo.VerificationCodeStatusActive,
+		ID:           idgen.BigID(),
+		UserID:       user.ID,
+		Email:        user.Email,
+		Purpose:      usersrepo.VerificationPurposeSignUp,
+		CodeHash:     codeHash,
+		Status:       usersrepo.VerificationCodeStatusActive,
 		AttemptCount: 0,
-		MaxAttempts: 5,
-		ExpiresAt:   now.Add(10 * time.Minute),
-		SentAt:      now,
-		CreatedAt:   now,
-		UpdatedAt:   now,
-		CreatedBy:   user.ID,
-		UpdatedBy:   user.ID,
+		MaxAttempts:  5,
+		ExpiresAt:    now.Add(10 * time.Minute),
+		SentAt:       now,
+		CreatedAt:    now,
+		UpdatedAt:    now,
+		CreatedBy:    user.ID,
+		UpdatedBy:    user.ID,
 	}
 
 	if err := uc.emailVerificationCodesRepo.Create(ctx, verifyCode); err != nil {
@@ -347,9 +346,9 @@ func (uc *Account) sendSignUpEmailCode(ctx context.Context, user *usersrepo.User
 
 	// Render email template
 	subject, body, err := uc.emailTemplateRenderer.Render("signup_email_code", map[string]string{
-		"code":             code,
-		"expires_minutes":  "10",
-		"product_name":     "Lynx",
+		"code":            code,
+		"expires_minutes": "10",
+		"product_name":    "Lynx",
 	})
 	if err != nil {
 		return errors.Wrap(err, "failed to render email template")

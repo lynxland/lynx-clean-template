@@ -7,17 +7,17 @@
 package main
 
 import (
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx-clean-template/internal/api/eventhandler"
-	"github.com/lynx-go/lynx-clean-template/internal/api/grpc"
-	"github.com/lynx-go/lynx-clean-template/internal/app"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/files"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users"
-	"github.com/lynx-go/lynx-clean-template/internal/infra"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/bunrepo"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/server"
-	"github.com/lynx-go/lynx/boot"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx-clean-template/internal/api/eventhandler"
+	"github.com/lynxland/lynx-clean-template/internal/api/grpc"
+	"github.com/lynxland/lynx-clean-template/internal/app"
+	"github.com/lynxland/lynx-clean-template/internal/domain/files"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users"
+	"github.com/lynxland/lynx-clean-template/internal/infra"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/bunrepo"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/internal/infra/server"
+	"github.com/lynxland/lynx/boot"
 )
 
 import (
@@ -44,7 +44,7 @@ func wireBootstrap(app2 lynx.App) (*boot.Bootstrap, func(), error) {
 		return nil, nil, err
 	}
 	validator := server.NewAuthValidator(appConfig)
-	policySet, err := server.NewAuthzPolicySet()
+	policySet, err := server.NewPolicySet()
 	if err != nil {
 		return nil, nil, err
 	}

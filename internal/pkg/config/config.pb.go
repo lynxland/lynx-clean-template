@@ -1367,7 +1367,7 @@ const file_config_proto_rawDesc = "" +
 	"\x03App\x12)\n" +
 	"\x04user\x18\x01 \x01(\v2\x15.lynx.api.config.UserR\x04user\"6\n" +
 	"\x04User\x12.\n" +
-	"\x13default_avatar_urls\x18\x01 \x03(\tR\x11defaultAvatarUrlsB<Z:github.com/lynx-go/lynx-clean-template/internal/pkg/configb\x06proto3"
+	"\x13default_avatar_urls\x18\x01 \x03(\tR\x11defaultAvatarUrlsB=Z;github.com/lynxland/lynx-clean-template/internal/pkg/configb\x06proto3"
 
 var (
 	file_config_proto_rawDescOnce sync.Once

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 )
 
 type VerificationPurpose string
@@ -24,21 +24,21 @@ const (
 )
 
 type EmailVerificationCode struct {
-	ID          idgen.ID
-	UserID      idgen.ID
-	Email       string
-	Purpose     VerificationPurpose
-	CodeHash    string
-	Status      VerificationCodeStatus
+	ID           idgen.ID
+	UserID       idgen.ID
+	Email        string
+	Purpose      VerificationPurpose
+	CodeHash     string
+	Status       VerificationCodeStatus
 	AttemptCount int
-	MaxAttempts int
-	ExpiresAt   time.Time
-	SentAt      time.Time
-	UsedAt      time.Time
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	CreatedBy   idgen.ID
-	UpdatedBy   idgen.ID
+	MaxAttempts  int
+	ExpiresAt    time.Time
+	SentAt       time.Time
+	UsedAt       time.Time
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	CreatedBy    idgen.ID
+	UpdatedBy    idgen.ID
 }
 
 type EmailVerificationCodesRepo interface {
@@ -49,4 +49,3 @@ type EmailVerificationCodesRepo interface {
 	MarkUsed(ctx context.Context, id idgen.ID, usedAt time.Time) error
 	MarkStatus(ctx context.Context, id idgen.ID, status VerificationCodeStatus, now time.Time) error
 }
-

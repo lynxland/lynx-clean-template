@@ -3,15 +3,15 @@ syntax = "proto3";
 // buf:lint:ignore PACKAGE_DIRECTORY_MATCH
 package lynx.api.v1;
 
-option go_package = "github.com/lynx-go/lynx-clean-template/genproto/api/v1;apipb";
+option go_package = "github.com/lynxland/lynx-clean-template/genproto/api/v1;apipb";
 
 import "buf/validate/validate.proto";
 import "shared/user.proto";
 import "google/api/annotations.proto";
-import "grpcapi/v1/authz.proto";
+import "grpcapi/v1/policy.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-// 服务默认 access=public：swagger 顶层声明 Bearer security；ACCESS_LEVEL_PUBLIC
+// 服务默认 anonymous（public 档）：swagger 顶层声明 Bearer security；public
 // 方法逐方法声明 security: [] + x-access: "public"。
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   security_definitions: {
@@ -47,7 +47,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service AuthService {
-  option (grpcapi.v1.service_auth) = { default_access: ACCESS_LEVEL_PUBLIC };
+  option (grpcapi.v1.service) = { default_policy { anonymous: true } default_exposure: EXPOSURE_PUBLIC label: "public" };
 
   rpc Token(TokenRequest) returns (TokenResponse) {
     option (google.api.http) = {

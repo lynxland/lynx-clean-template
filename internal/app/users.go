@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	apipb "github.com/lynx-go/lynx-clean-template/genproto/api/v1"
-	sharedpb "github.com/lynx-go/lynx-clean-template/genproto/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/contexts"
-	apierrors "github.com/lynx-go/lynx-clean-template/pkg/errors"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	apipb "github.com/lynxland/lynx-clean-template/genproto/api/v1"
+	sharedpb "github.com/lynxland/lynx-clean-template/genproto/shared"
+	"github.com/lynxland/lynx-clean-template/internal/domain/shared"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/contexts"
+	apierrors "github.com/lynxland/lynx-clean-template/pkg/errors"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

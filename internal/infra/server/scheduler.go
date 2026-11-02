@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/lynx-go/lynx/contrib/schedule"
+	"github.com/lynxland/lynx/contrib/schedule"
 )
 
 func NewScheduler() (*schedule.Scheduler, error) {

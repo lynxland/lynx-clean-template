@@ -6,9 +6,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen/bigid"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen/ulid"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen/uuid"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen/bigid"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen/ulid"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen/uuid"
 	"github.com/samber/lo"
 )
 

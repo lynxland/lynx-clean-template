@@ -7,7 +7,7 @@
 package tests
 
 import (
-	"github.com/lynx-go/lynx"
+	"github.com/lynxland/lynx"
 )
 
 // Injectors from wire.go:

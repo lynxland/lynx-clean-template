@@ -4,7 +4,7 @@ syntax = "proto3";
 // buf:lint:ignore PACKAGE_VERSION_SUFFIX
 package lynx.shared;
 
-option go_package = "github.com/lynx-go/lynx-clean-template/genproto/shared;sharedpb";
+option go_package = "github.com/lynxland/lynx-clean-template/genproto/shared;sharedpb";
 
 message User {
   string id = 1;

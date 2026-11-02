@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/crud"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/crud"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 )
 
 type fakePasswordHasher struct{}
@@ -58,9 +58,9 @@ func (f *fakeUsersRepo) SetSuperAdmin(_ context.Context, _ idgen.ID, _ bool) err
 	return nil
 }
 
-func (f *fakeUsersRepo) Create(_ context.Context, _ *repo.User) error { return nil }
+func (f *fakeUsersRepo) Create(_ context.Context, _ *repo.User) error              { return nil }
 func (f *fakeUsersRepo) Update(_ context.Context, _ *repo.User, _ ...string) error { return nil }
-func (f *fakeUsersRepo) Delete(_ context.Context, _ *repo.User) error { return nil }
+func (f *fakeUsersRepo) Delete(_ context.Context, _ *repo.User) error              { return nil }
 func (f *fakeUsersRepo) List(_ context.Context, _ crud.ListParams) ([]*repo.User, int, string, error) {
 	return nil, 0, "", nil
 }
@@ -130,4 +130,3 @@ func TestCreate_NonFirstUserStaysNormalUser(t *testing.T) {
 		t.Fatalf("non-first user role = %q, want user", created.Role)
 	}
 }
-

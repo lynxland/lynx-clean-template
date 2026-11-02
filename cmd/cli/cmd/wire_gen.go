@@ -7,11 +7,11 @@
 package cmd
 
 import (
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx-clean-template/internal/api/eventhandler"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/bunrepo"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/server"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx-clean-template/internal/api/eventhandler"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/bunrepo"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/internal/infra/server"
 )
 
 // Injectors from wire.go:

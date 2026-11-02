@@ -2,9 +2,9 @@ package infra
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/server"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/internal/infra/server"
 )
 
 var ProviderSet = wire.NewSet(
@@ -12,7 +12,7 @@ var ProviderSet = wire.NewSet(
 	server.NewGRPCGatewayServer,
 	server.NewGRPCServer,
 	server.NewAuthValidator,
-	server.NewAuthzPolicySet,
+	server.NewPolicySet,
 	server.NewScheduler,
 	clients.NewDataClients,
 

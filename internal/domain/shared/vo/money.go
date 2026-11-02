@@ -1,7 +1,7 @@
 package vo
 
 import (
-	"github.com/lynx-go/lynx-clean-template/pkg/errors"
+	"github.com/lynxland/lynx-clean-template/pkg/errors"
 )
 
 // Money represents a monetary amount in a specific currency.

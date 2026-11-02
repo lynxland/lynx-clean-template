@@ -3,10 +3,10 @@ package bunrepo
 import (
 	"context"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/model"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/model"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 	"github.com/samber/lo"
 	"github.com/uptrace/bun"
 )

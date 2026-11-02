@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/lynx-go/lynx-clean-template/pkg/crud"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/pkg/crud"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 )
 
 type Files interface {

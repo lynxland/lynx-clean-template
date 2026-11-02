@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/go-viper/mapstructure/v2"
-	"github.com/lynx-go/lynx"
+	"github.com/lynxland/lynx"
 )
 
 // DecodeLynxConfig decodes the Lynx application config into out using the

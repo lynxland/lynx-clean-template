@@ -3,18 +3,18 @@ syntax = "proto3";
 // buf:lint:ignore PACKAGE_DIRECTORY_MATCH
 package lynx.api.v1;
 
-option go_package = "github.com/lynx-go/lynx-clean-template/genproto/api/v1;apipb";
+option go_package = "github.com/lynxland/lynx-clean-template/genproto/api/v1;apipb";
 
 import "shared/user.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
-import "grpcapi/v1/authz.proto";
+import "grpcapi/v1/policy.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 // 服务默认 access=end_user：swagger 顶层声明 Bearer security；super admin
-// 管理方法以 method_auth 提升为 PERMISSION 档并逐方法声明 x-access 覆盖。
+// 管理方法以 method 策略声明认证要求（角色判定在 app 用例层），并逐方法声明 x-access 覆盖。
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   security_definitions: {
     security: {
@@ -51,40 +51,50 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // UsersService provides operations for the authenticated user to manage their own profile.
 // Super admin operations (GrantSuperAdmin / RevokeSuperAdmin) require the caller to be a super admin.
 service UsersService {
-  option (grpcapi.v1.service_auth) = { default_access: ACCESS_LEVEL_END_USER };
+  option (grpcapi.v1.service) = { default_policy { authenticated: true } default_exposure: EXPOSURE_PUBLIC label: "end_user" };
 
   // UpdateMyProfile updates the authenticated user's profile
   // buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE
   // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  
   rpc UpdateMyProfile(UpdateMyProfileRequest) returns (UserProfile) {
     option (google.api.http) = {
       patch: "/v1/users/-/profile"
       body: "user"
     };
+    // v0.5 显式文档 label：与 openapi x-access 契约逐字对齐。
+    option (grpcapi.v1.method) = { label: "end_user" };
   }
 
   // GetUserProfile returns a user's profile by ID
   // When user_id is "-", returns the authenticated user's profile
   // buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE
   // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  
   rpc GetUserProfile(GetUserProfileRequest) returns (UserProfile) {
     option (google.api.http) = {
       get: "/v1/users/{user_id}/profile"
     };
+    // v0.5 显式文档 label：与 openapi x-access 契约逐字对齐。
+    option (grpcapi.v1.method) = { label: "end_user" };
   }
 
   // GrantSuperAdmin grants super admin privilege to the target user.
   // Requires the caller to be a super admin.
   // buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE
   // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  
   rpc GrantSuperAdmin(GrantSuperAdminRequest) returns (UserProfile) {
     option (google.api.http) = {
       post: "/v1/admin/users/{user_id}/super-admin"
       body: "*"
     };
-    option (grpcapi.v1.method_auth) = {
-      access: ACCESS_LEVEL_PERMISSION
-      permissions: ["super_admin"]
+    // v0.1 PERMISSION 档的运行时语义是「拦截器仅做端用户认证，super_admin
+    // 角色判定在 app 用例层（users.IsSuperAdmin）」——policy 声明与此对齐
+    // （authenticated 而非 roles，避免声明库侧永不执行的策略）。
+    option (grpcapi.v1.method) = {
+      policy { authenticated: true }
+      label: "permission"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       extensions: {
@@ -98,13 +108,17 @@ service UsersService {
   // Requires the caller to be a super admin. Fails if target is the last super admin.
   // buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE
   // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME
+  
   rpc RevokeSuperAdmin(RevokeSuperAdminRequest) returns (UserProfile) {
     option (google.api.http) = {
       delete: "/v1/admin/users/{user_id}/super-admin"
     };
-    option (grpcapi.v1.method_auth) = {
-      access: ACCESS_LEVEL_PERMISSION
-      permissions: ["super_admin"]
+    // v0.1 PERMISSION 档的运行时语义是「拦截器仅做端用户认证，super_admin
+    // 角色判定在 app 用例层（users.IsSuperAdmin）」——policy 声明与此对齐
+    // （authenticated 而非 roles，避免声明库侧永不执行的策略）。
+    option (grpcapi.v1.method) = {
+      policy { authenticated: true }
+      label: "permission"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       extensions: {

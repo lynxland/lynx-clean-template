@@ -4,4 +4,3 @@ package shared
 type EmailTemplateRenderer interface {
 	Render(templateID string, vars map[string]string) (subject string, body string, err error)
 }
-

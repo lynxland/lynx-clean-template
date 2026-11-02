@@ -1,6 +1,6 @@
 package events
 
-import "github.com/lynx-go/lynx-clean-template/pkg/pubsub"
+import "github.com/lynxland/lynx-clean-template/pkg/pubsub"
 
 const (
 	EventAccountCreated       pubsub.EventName = "account:created"

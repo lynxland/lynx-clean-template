@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/lynx-go/grpcapi/gateway"
-	sharedpb "github.com/lynx-go/lynx-clean-template/genproto/shared"
+	"github.com/lynxland/grpcapi/gateway"
+	sharedpb "github.com/lynxland/lynx-clean-template/genproto/shared"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -29,7 +29,7 @@ const (
 // ErrorResponseBuilder 实现 grpcapi gateway.ErrorBodyBuilder：错误体形状沿用
 // 模板对外契约（shared.ErrorResponse{error:{type,code,message,params}}）。
 // 机制（gRPC code → HTTP 状态映射、Internal/Unknown 脱敏、429 Retry-After、
-// error_id 生成）由库的 NewErrorHandler 承担：
+// error_id 生成）由库的错误编码器（BuilderEncoder）承担：
 //   - code 字段 = gRPC code 字符串（如 "InvalidArgument"，与旧实现一致）；
 //   - type 字段 = 下方 grpcCodeToErrorType 映射（模板既有契约）；
 //   - error_id 填入库生成的追踪 ID，经 params.error_id 下发（新增字段，

@@ -3,10 +3,10 @@ syntax = "proto3";
 // buf:lint:ignore PACKAGE_DIRECTORY_MATCH
 package lynx.api.v1;
 
-option go_package = "github.com/lynx-go/lynx-clean-template/genproto/api/v1;apipb";
+option go_package = "github.com/lynxland/lynx-clean-template/genproto/api/v1;apipb";
 
 import "google/api/annotations.proto";
-import "grpcapi/v1/authz.proto";
+import "grpcapi/v1/policy.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 // 服务默认 access=end_user：swagger 顶层声明 Bearer security。
@@ -46,12 +46,15 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // FilesService 提供文件上传下载的预签名 URL（当前未注册到 gRPC server；
 // 服务默认档参与策略收集，保证注册后即可被启动断言覆盖）。
 service FilesService {
-  option (grpcapi.v1.service_auth) = { default_access: ACCESS_LEVEL_END_USER };
+  option (grpcapi.v1.service) = { default_policy { authenticated: true } default_exposure: EXPOSURE_PUBLIC label: "end_user" };
 
+  
   rpc GetPresignedURL(GetPresignedURLRequest) returns(GetPresignedURLResponse) {
     option (google.api.http) = {
       get: "/v1/files/presigned-urls"
     };
+    // v0.5 显式文档 label：与 openapi x-access 契约逐字对齐。
+    option (grpcapi.v1.method) = { label: "end_user" };
   }
 }
 message GetPresignedURLRequest {

@@ -25,4 +25,3 @@ type EmailVerificationCode struct {
 	CreatedBy    string    `bun:"created_by"`
 	UpdatedBy    string    `bun:"updated_by"`
 }
-

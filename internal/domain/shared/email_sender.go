@@ -14,4 +14,3 @@ type EmailMessage struct {
 type EmailSender interface {
 	Send(ctx context.Context, msg EmailMessage) error
 }
-

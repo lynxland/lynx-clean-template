@@ -65,7 +65,6 @@
         ]
       },
       "post": {
-        "summary": "buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "GroupsService_CreateGroup",
         "responses": {
           "200": {
@@ -98,7 +97,6 @@
     },
     "/v1/groups/{group_id}": {
       "get": {
-        "summary": "buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "GroupsService_GetGroup",
         "responses": {
           "200": {
@@ -155,7 +153,6 @@
         ]
       },
       "patch": {
-        "summary": "buf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "GroupsService_UpdateGroup",
         "responses": {
           "200": {

@@ -6,8 +6,8 @@ package cmd
 import (
 	"context"
 
-	appconfig "github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/x/encoding/json"
+	appconfig "github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/x/encoding/json"
 	"github.com/spf13/cobra"
 )
 
@@ -16,12 +16,12 @@ var printConfigCmd = &cobra.Command{
 	Use:   "print-config",
 	Short: "print config",
 	Long:  `Print Configuration`,
-		Run: func(cmd *cobra.Command, args []string) {
-			buildCLI(cmd, args, func(ctx context.Context, cc *CLIContext, args *CLIArgs) error {
+	Run: func(cmd *cobra.Command, args []string) {
+		buildCLI(cmd, args, func(ctx context.Context, cc *CLIContext, args *CLIArgs) error {
 			config := map[string]any{}
 			if err := appconfig.DecodeLynxConfig(cc.App, &config); err != nil {
-					return err
-				}
+				return err
+			}
 			//log.InfoContext(ctx, "print config", "configs", json.MustMarshalToString(config))
 			cc.Println("configuration: ")
 			cc.Println("")

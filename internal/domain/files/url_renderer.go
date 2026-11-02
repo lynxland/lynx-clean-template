@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/files/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/internal/domain/files/repo"
+	"github.com/lynxland/lynx-clean-template/internal/domain/shared"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
 )
 
 type urlRenderer struct {

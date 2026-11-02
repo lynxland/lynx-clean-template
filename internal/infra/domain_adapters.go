@@ -6,9 +6,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/shared"
-	"github.com/lynx-go/lynx-clean-template/pkg/pubsub"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx-clean-template/internal/domain/shared"
+	"github.com/lynxland/lynx-clean-template/pkg/pubsub"
+	"github.com/lynxland/x/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,7 +28,7 @@ func (l *lynxLogger) DebugContext(ctx context.Context, msg string, keysAndValues
 	log.DebugContext(ctx, msg, keysAndValues...)
 }
 
-// NewDomainLogger provides a shared.Logger implementation backed by lynx-go/x/log.
+// NewDomainLogger provides a shared.Logger implementation backed by lynxland/x/log.
 func NewDomainLogger() shared.Logger {
 	return &lynxLogger{}
 }

@@ -6,11 +6,11 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/shared"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/errors"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/internal/domain/shared"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/errors"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 )
 
 type UserService struct {

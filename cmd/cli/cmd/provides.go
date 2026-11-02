@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx-clean-template/internal/api"
-	"github.com/lynx-go/lynx-clean-template/internal/app"
-	"github.com/lynx-go/lynx-clean-template/internal/domain"
-	"github.com/lynx-go/lynx-clean-template/internal/infra"
-	config "github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/pubsub"
-	"github.com/lynx-go/lynx/boot"
-	"github.com/lynx-go/lynx/eventbus"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx-clean-template/internal/api"
+	"github.com/lynxland/lynx-clean-template/internal/app"
+	"github.com/lynxland/lynx-clean-template/internal/domain"
+	"github.com/lynxland/lynx-clean-template/internal/infra"
+	config "github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/pubsub"
+	"github.com/lynxland/lynx/boot"
+	"github.com/lynxland/lynx/eventbus"
 )
 
 //go:generate wire

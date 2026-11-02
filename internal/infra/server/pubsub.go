@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/lynx-go/lynx-clean-template/internal/api/eventhandler"
-	"github.com/lynx-go/lynx-clean-template/pkg/pubsub"
-	"github.com/lynx-go/lynx/eventbus"
+	"github.com/lynxland/lynx-clean-template/internal/api/eventhandler"
+	"github.com/lynxland/lynx-clean-template/pkg/pubsub"
+	"github.com/lynxland/lynx/eventbus"
 )
 
 // NewPubSub builds a Broker backed by the application event bus.

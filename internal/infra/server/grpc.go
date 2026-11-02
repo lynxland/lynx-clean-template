@@ -1,14 +1,14 @@
 package server
 
 import (
-	"github.com/lynx-go/grpcapi/authz"
-	grpcapiinterceptor "github.com/lynx-go/grpcapi/interceptor"
-	"github.com/lynx-go/lynx"
-	apipb "github.com/lynx-go/lynx-clean-template/genproto/api/v1"
-	grpcsvc "github.com/lynx-go/lynx-clean-template/internal/api/grpc"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/grpc/interceptor"
-	lynxgrpc "github.com/lynx-go/lynx/server/grpc"
+	grpcapiinterceptor "github.com/lynxland/grpcapi/interceptor"
+	"github.com/lynxland/grpcapi/policy"
+	"github.com/lynxland/lynx"
+	apipb "github.com/lynxland/lynx-clean-template/genproto/api/v1"
+	grpcsvc "github.com/lynxland/lynx-clean-template/internal/api/grpc"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/grpc/interceptor"
+	lynxgrpc "github.com/lynxland/lynx/server/grpc"
 )
 
 func NewAuthValidator(
@@ -21,7 +21,7 @@ func NewGRPCServer(
 	app lynx.App,
 	cfg *config.AppConfig,
 	authValidator interceptor.Validator,
-	policies *authz.PolicySet,
+	policies *policy.Set,
 	auth *grpcsvc.AuthService,
 	groups *grpcsvc.GroupsService,
 	users *grpcsvc.UsersService,
@@ -34,30 +34,23 @@ func NewGRPCServer(
 		return nil, err
 	}
 
-	// 拦截器链装配换库（grpcapi）：Assemble 按职能槽位构造期断言顺序
-	//（ClientInfo 打头、Validate 收尾，auth 居中——三槽子集是合法形态）。
-	// 模板原先没有 clientInfo 拦截器，经库免费获得（客户端 IP/UA 注入 ctx；
-	// 模板 config 无 trusted_proxies 配置，默认不信任转发头，一律使用 gRPC
-	// peer 地址）。
-	chain, err := grpcapiinterceptor.Assemble(
-		grpcapiinterceptor.ChainItem{
-			Slot:        grpcapiinterceptor.SlotClientInfo,
-			Interceptor: grpcapiinterceptor.NewClientInfo(grpcapiinterceptor.ClientInfoConfig{}).Unary(),
-		},
-		grpcapiinterceptor.ChainItem{
-			Slot:        grpcapiinterceptor.SlotAuth,
-			Interceptor: authInterceptor.UnaryAuthMiddleware,
-		},
-		grpcapiinterceptor.ChainItem{
-			Slot:        grpcapiinterceptor.SlotValidate,
-			Interceptor: grpcapiinterceptor.NewValidate().Unary(),
-		},
+	// 拦截器链装配换库（grpcapi Stage 语义）：clientinfo 打头、validate 收尾
+	//（DefaultChainOptions 构造期断言），authn 居中（Order 30）。模板原先没有
+	// clientInfo 拦截器，经库免费获得（客户端 IP/UA 注入 ctx；模板 config 无
+	// trusted_proxies 配置，默认不信任转发头，一律使用 gRPC peer 地址）。
+	chain, err := grpcapiinterceptor.AssembleWith(grpcapiinterceptor.DefaultChainOptions(),
+		grpcapiinterceptor.Stage{Name: grpcapiinterceptor.StageClientInfo, Order: grpcapiinterceptor.OrderClientInfo,
+			Unary: grpcapiinterceptor.NewClientInfo(grpcapiinterceptor.ClientInfoConfig{}).Unary()},
+		grpcapiinterceptor.Stage{Name: grpcapiinterceptor.StageAuthn, Order: grpcapiinterceptor.OrderAuthn,
+			Unary: authInterceptor.UnaryAuthMiddleware},
+		grpcapiinterceptor.Stage{Name: grpcapiinterceptor.StageValidate, Order: grpcapiinterceptor.OrderValidate,
+			Unary: grpcapiinterceptor.NewValidate().Unary()},
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	srv := lynxgrpc.NewServer(lynxgrpc.WithAddr(addr), lynxgrpc.WithTimeout(timeout), lynxgrpc.WithLogger(app.Logger()), lynxgrpc.WithInterceptors(chain...))
+	srv := lynxgrpc.NewServer(lynxgrpc.WithAddr(addr), lynxgrpc.WithTimeout(timeout), lynxgrpc.WithLogger(app.Logger()), lynxgrpc.WithInterceptors(chain.Unary()...))
 	grpcSrv := srv.GetServer()
 
 	// Register public API services

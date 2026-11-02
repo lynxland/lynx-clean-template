@@ -3,8 +3,8 @@ package bunrepo
 import (
 	"context"
 
-	"github.com/lynx-go/lynx-clean-template/pkg/crud"
-	"github.com/lynx-go/lynx-clean-template/pkg/types"
+	"github.com/lynxland/lynx-clean-template/pkg/crud"
+	"github.com/lynxland/lynx-clean-template/pkg/types"
 	"github.com/uptrace/bun"
 )
 

@@ -6,14 +6,14 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx-clean-template/internal/app"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/pubsub"
-	"github.com/lynx-go/lynx/boot"
-	"github.com/lynx-go/lynx/contrib/zap"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx-clean-template/internal/app"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/pubsub"
+	"github.com/lynxland/lynx/boot"
+	"github.com/lynxland/lynx/contrib/zap"
+	"github.com/lynxland/x/log"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -102,12 +102,12 @@ func WithPreWaitTime(waitTime time.Duration) CLIOption {
 	}
 }
 
-func newFileLogger(app lynx.App) (*slog.Logger, error) {
-	logLevel := app.Config().GetString("cli.log-level")
+func newFileLogger(ctx lynx.AppContext) (*slog.Logger, error) {
+	logLevel := ctx.Config().GetString("cli.log-level")
 	if logLevel == "" {
 		logLevel = "info"
 	}
-	logFile := app.Config().GetString("cli.log-file")
+	logFile := ctx.Config().GetString("cli.log-file")
 	if logFile == "" {
 		logFile = "cli.log"
 	}
@@ -127,25 +127,17 @@ func runCLI(cmd *cobra.Command, args []string, fn func(ctx context.Context, cc *
 }
 
 func buildCLI(cmd *cobra.Command, args []string, fn func(ctx context.Context, cc *CLIContext, args *CLIArgs) error, opts ...CLIOption) *lynx.Runner {
+	// CLI 选项在构造期生效（logger 经 WithLoggerProvider 注入，见下），
+	// PreWaitTime/PostWaitTime 的消费点在 setup 闭包内，提升到构造期同样可见。
+	o := &cliOptions{
+		PreWaitTime:  10 * time.Millisecond,
+		PostWaitTime: 10 * time.Millisecond,
+		LogToFile:    false,
+	}
+	for _, opt := range opts {
+		opt(o)
+	}
 	return lynx.NewRunner(func(app lynx.App) error {
-		o := &cliOptions{
-			PreWaitTime:  10 * time.Millisecond,
-			PostWaitTime: 10 * time.Millisecond,
-			LogToFile:    false,
-		}
-		for _, opt := range opts {
-			opt(o)
-		}
-		if o.LogToFile {
-			l, err := newFileLogger(app)
-			if err != nil {
-				return err
-			}
-			app.SetLogger(l)
-		} else {
-			app.SetLogger(zap.MustNewLogger(app))
-		}
-
 		cc, cleanup, err := wireCLIContext(app)
 		if err != nil {
 			return err
@@ -180,7 +172,15 @@ func buildCLI(cmd *cobra.Command, args []string, fn func(ctx context.Context, cc
 			return nil
 		})
 		return nil
-	}, newOptionsFromCmd(cmd)...)
+	},
+		// logger 经构造期 provider 注入（v1.16.0 起 SetLogger 移除）：LogToFile
+		// 走文件 logger（cli.log-level / cli.log-file 配置项），否则 contrib/zap。
+		append(newOptionsFromCmd(cmd), lynx.WithLoggerProvider(func(ctx lynx.AppContext) (*slog.Logger, error) {
+			if o.LogToFile {
+				return newFileLogger(ctx)
+			}
+			return zap.MustNewLogger(ctx), nil
+		}))...)
 }
 
 func newOptionsFromCmd(cmd *cobra.Command) []lynx.Option {

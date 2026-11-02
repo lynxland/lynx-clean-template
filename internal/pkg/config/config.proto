@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lynx.api.config;
 
-option go_package = "github.com/lynx-go/lynx-clean-template/internal/pkg/config";
+option go_package = "github.com/lynxland/lynx-clean-template/internal/pkg/config";
 
 message AppConfig {
   Server server = 1;

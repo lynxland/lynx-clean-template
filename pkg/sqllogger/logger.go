@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/google/uuid"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/x/log"
 	sqldblogger "github.com/qiulin/sqldb-logger"
 )
 

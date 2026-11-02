@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	apipb "github.com/lynx-go/lynx-clean-template/genproto/api/v1"
-	"github.com/lynx-go/lynx-clean-template/internal/app"
+	apipb "github.com/lynxland/lynx-clean-template/genproto/api/v1"
+	"github.com/lynxland/lynx-clean-template/internal/app"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

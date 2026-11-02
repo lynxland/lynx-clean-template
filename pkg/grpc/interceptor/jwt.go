@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/lynx-go/grpcapi/authz"
-	grpcapiinterceptor "github.com/lynx-go/grpcapi/interceptor"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/contexts"
-	"github.com/lynx-go/lynx-clean-template/pkg/jwtparser"
+	grpcapiinterceptor "github.com/lynxland/grpcapi/interceptor"
+	"github.com/lynxland/grpcapi/policy"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/contexts"
+	"github.com/lynxland/lynx-clean-template/pkg/jwtparser"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -22,25 +22,23 @@ type (
 		ValidateToken(ctx context.Context, token string) (string, error)
 	}
 
-	// AuthInterceptor 是 grpcapi 拦截器链的 SlotAuth 实现：不再维护硬编码
-	// skip 列表，改为按注入的 authz.PolicySet（proto 注解的运行时投影）逐方法
+	// AuthInterceptor 是 grpcapi 拦截器链的 authn Stage 实现：不再维护硬编码
+	// skip 列表，改为按注入的 policy.Set（proto 注解的运行时投影）逐方法
 	// 判定——proto 是鉴权策略唯一声明源。
 	AuthInterceptor struct {
 		validator Validator
-		policies  *authz.PolicySet
+		policies  *policy.Set
 	}
 )
 
-// NewAuthInterceptor 构造 auth 拦截器。policies 由 server.NewAuthzPolicySet
+// NewAuthInterceptor 构造 auth 拦截器。policies 由 server.NewPolicySet
 // 从 proto 注解收集（构造期已 fail-closed），此处按方法策略分流：
-//   - PUBLIC：跳过认证（原 skip 列表语义，声明点上移到 proto）；
-//   - END_USER / PERMISSION：JWT 校验并注入用户身份。PERMISSION 档（如
-//     GrantSuperAdmin 的 "super_admin"）拦截器只做端用户认证；角色权限判定
-//     交由 app 用例层把关（users.IsSuperAdmin 已有该检查），避免拦截器与
-//     app 层两套权限语义漂移；
-//   - 其余（SERVER/SYSTEM/未知）：403 fail-closed（模板当前不使用这些档位；
-//     若未来引入 SERVER 面，应在此扩展 admin 会话/API key 凭证判定）。
-func NewAuthInterceptor(validator Validator, policies *authz.PolicySet) (*AuthInterceptor, error) {
+//   - anonymous：跳过认证（原 PUBLIC 档语义，声明点上移到 proto）；
+//   - 其余（authenticated/角色等要求）：JWT 校验并注入用户身份。声明了
+//     roles/permissions 的方法（如 GrantSuperAdmin 的 super_admin）拦截器
+//     只做端用户认证；角色权限判定交由 app 用例层把关（users.IsSuperAdmin
+//     已有该检查），避免拦截器与 app 层两套权限语义漂移。
+func NewAuthInterceptor(validator Validator, policies *policy.Set) (*AuthInterceptor, error) {
 	if validator == nil {
 		return nil, errors.New("validator cannot be nil")
 	}
@@ -57,21 +55,19 @@ func (i *AuthInterceptor) UnaryAuthMiddleware(ctx context.Context, req any, info
 		return handler(ctx, req)
 	}
 
-	policy, ok := i.policies.Get(info.FullMethod)
-	if !ok {
-		// fail-closed 双保险：启动断言 AssertAllRegisteredHavePolicy 应已
-		// 拦截漏配，运行期再兜底一次（漏配方法拒绝而非放行）。
-		return nil, status.Errorf(codes.PermissionDenied, "missing auth policy for %s", info.FullMethod)
+	if !i.policies.IsAnonymous(info.FullMethod) {
+		if _, ok := i.policies.Get(info.FullMethod); !ok {
+			// fail-closed 双保险：启动断言 AssertAllRegisteredHavePolicy 应已
+			// 拦截漏配，运行期再兜底一次（漏配方法拒绝而非放行）。
+			return nil, status.Errorf(codes.PermissionDenied, "missing auth policy for %s", info.FullMethod)
+		}
+		return i.authenticate(ctx, req, info, handler)
 	}
-	switch policy.Access {
-	case authz.AccessPublic:
-		return handler(ctx, req)
-	case authz.AccessEndUser, authz.AccessPermission:
-		// 继续走端用户认证。
-	default:
-		return nil, status.Errorf(codes.PermissionDenied, "access level %d is not accepted for %s", int32(policy.Access), info.FullMethod)
-	}
+	return handler(ctx, req)
+}
 
+// authenticate 校验 Bearer JWT 并把用户身份注入 ctx，随后放行 handler。
+func (i *AuthInterceptor) authenticate(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 	// get metadata object
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {

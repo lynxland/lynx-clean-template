@@ -2,7 +2,7 @@ package bun
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/bunrepo"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/bunrepo"
 )
 
 // ProviderSet is the Wire provider set for Bun ORM

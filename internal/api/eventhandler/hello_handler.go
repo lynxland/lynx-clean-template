@@ -4,11 +4,11 @@ import (
 	"context"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/events"
-	"github.com/lynx-go/lynx-clean-template/pkg/pubsub"
-	"github.com/lynx-go/lynx/eventbus"
-	"github.com/lynx-go/x/encoding/json"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx-clean-template/internal/domain/events"
+	"github.com/lynxland/lynx-clean-template/pkg/pubsub"
+	"github.com/lynxland/lynx/eventbus"
+	"github.com/lynxland/x/encoding/json"
+	"github.com/lynxland/x/log"
 )
 
 type HelloHandler struct {

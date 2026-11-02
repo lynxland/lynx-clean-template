@@ -3,9 +3,9 @@ package pubsub
 import (
 	"context"
 
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx/eventbus"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx/eventbus"
+	"github.com/lynxland/x/log"
 )
 
 // Router is a Lynx service that binds handlers to the event bus on start.

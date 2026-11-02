@@ -3,8 +3,8 @@ package cronjob
 import (
 	"context"
 
-	"github.com/lynx-go/lynx/contrib/schedule"
-	"github.com/lynx-go/x/log"
+	"github.com/lynxland/lynx/contrib/schedule"
+	"github.com/lynxland/x/log"
 )
 
 type DemoTask struct {

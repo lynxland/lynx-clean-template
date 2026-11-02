@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
 )
 
 // CORSMiddleware creates a CORS middleware based on the provided configuration

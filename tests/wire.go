@@ -5,7 +5,7 @@ package tests
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx"
+	"github.com/lynxland/lynx"
 )
 
 func wireTestingSuite(app lynx.App) (*TestingSuite, func(), error) {

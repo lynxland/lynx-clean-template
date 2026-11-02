@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/lynx-go/grpcapi/gateway"
-	"github.com/lynx-go/lynx"
-	apipb "github.com/lynx-go/lynx-clean-template/genproto/api/v1"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	lynxhttp "github.com/lynx-go/lynx/server/http"
+	"github.com/lynxland/grpcapi/gateway"
+	"github.com/lynxland/lynx"
+	apipb "github.com/lynxland/lynx-clean-template/genproto/api/v1"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	lynxhttp "github.com/lynxland/lynx/server/http"
 	"google.golang.org/grpc"
 )
 
@@ -30,12 +30,13 @@ func NewGRPCGatewayServer(
 
 	ctx := app.Context()
 
-	// gateway 装配换库（grpcapi）：NewMux = 统一错误处理器
-	//（ErrorResponseBuilder 承载模板错误契约）+ 入/出站 header matcher
-	//（入站 authorization 恒拒绝防双写 401，出站 set-cookie 直透）+ 三个
-	// marshaler 槽位统一 gateway.NewMarshaler（UseProtoNames + DiscardUnknown）。
+	// gateway 装配换库（grpcapi）：NewMux = 统一错误编码器
+	//（ErrorResponseBuilder 承载模板错误契约，经 BuilderEncoder 适配）+
+	// 入/出站 header matcher（入站 authorization 恒拒绝防双写 401，出站
+	// set-cookie 直透）+ 三个 marshaler 槽位统一 gateway.NewMarshaler
+	//（UseProtoNames + DiscardUnknown）。
 	mux := gateway.NewMux(gateway.MuxOptions{
-		ErrorHandler: gateway.NewErrorHandler(ErrorResponseBuilder{}, gateway.HTTPOptions{}),
+		ErrorEncoder: gateway.BuilderEncoder(ErrorResponseBuilder{}, gateway.HTTPOptions{}),
 	})
 
 	// 拨号换库：gateway.Dial = 端点归一（原 localhost:port 拼接）+ insecure

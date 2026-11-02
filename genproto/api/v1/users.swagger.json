@@ -18,7 +18,6 @@
   "paths": {
     "/v1/admin/users/{user_id}/super-admin": {
       "delete": {
-        "summary": "RevokeSuperAdmin revokes super admin privilege from the target user.\nRequires the caller to be a super admin. Fails if target is the last super admin.\nbuf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "UsersService_RevokeSuperAdmin",
         "responses": {
           "200": {
@@ -48,7 +47,6 @@
         "x-access": "permission"
       },
       "post": {
-        "summary": "GrantSuperAdmin grants super admin privilege to the target user.\nRequires the caller to be a super admin.\nbuf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "UsersService_GrantSuperAdmin",
         "responses": {
           "200": {
@@ -88,7 +86,6 @@
     },
     "/v1/users/-/profile": {
       "patch": {
-        "summary": "UpdateMyProfile updates the authenticated user's profile\nbuf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "UsersService_UpdateMyProfile",
         "responses": {
           "200": {
@@ -121,7 +118,6 @@
     },
     "/v1/users/{user_id}/profile": {
       "get": {
-        "summary": "GetUserProfile returns a user's profile by ID\nWhen user_id is \"-\", returns the authenticated user's profile\nbuf:lint:ignore RPC_REQUEST_RESPONSE_UNIQUE\nbuf:lint:ignore RPC_RESPONSE_STANDARD_NAME",
         "operationId": "UsersService_GetUserProfile",
         "responses": {
           "200": {

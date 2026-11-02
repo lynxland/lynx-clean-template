@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx"
+	"github.com/lynxland/lynx"
 )
 
 func wireCLIContext(app lynx.App) (*CLIContext, func(), error) {

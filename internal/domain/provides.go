@@ -2,8 +2,8 @@ package domain
 
 import (
 	"github.com/google/wire"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/files"
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users"
+	"github.com/lynxland/lynx-clean-template/internal/domain/files"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users"
 )
 
 var ProviderSet = wire.NewSet(

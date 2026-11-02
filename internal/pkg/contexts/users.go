@@ -3,7 +3,7 @@ package contexts
 import (
 	"context"
 
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 )
 
 func UserID(ctx context.Context) (idgen.ID, bool) {

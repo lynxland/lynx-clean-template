@@ -6,9 +6,9 @@ package logger
 import (
 	"log/slog"
 
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx/contrib/zap"
-	"github.com/lynx-go/lynx/logging"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx/contrib/zap"
+	"github.com/lynxland/lynx/logging"
 )
 
 // NewZap 创建基于 zap 的 slog 实例（含服务标识字段），并包装

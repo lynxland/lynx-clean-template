@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/lynx-go/lynx"
-	"github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx/contrib/zap"
+	"github.com/lynxland/lynx"
+	"github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx/contrib/zap"
 )
 
 type TestingSuite struct {
@@ -46,12 +46,12 @@ func WithPreWaitTime(waitTime time.Duration) TestOption {
 	}
 }
 
-func newFileLogger(app lynx.App) (*slog.Logger, error) {
-	logLevel := app.Config().GetString("test.log-level")
+func newFileLogger(ctx lynx.AppContext) (*slog.Logger, error) {
+	logLevel := ctx.Config().GetString("test.log-level")
 	if logLevel == "" {
 		logLevel = "info"
 	}
-	logFile := app.Config().GetString("test.log-file")
+	logFile := ctx.Config().GetString("test.log-file")
 	if logFile == "" {
 		logFile = "test.log"
 	}
@@ -72,26 +72,16 @@ func RunTestSuite(fn func(ctx context.Context, ts *TestingSuite) error, opts ...
 }
 
 func buildTestSuite(fn func(ctx context.Context, ts *TestingSuite) error, opts ...TestOption) *lynx.Runner {
+	// 测试选项在构造期生效（logger 经 WithLoggerProvider 注入，见下）。
+	o := &TestOptions{
+		PreWaitTime:  10 * time.Millisecond,
+		PostWaitTime: 10 * time.Millisecond,
+		LogToFile:    false,
+	}
+	for _, opt := range opts {
+		opt(o)
+	}
 	return lynx.NewRunner(func(app lynx.App) error {
-		o := &TestOptions{
-			PreWaitTime:  10 * time.Millisecond,
-			PostWaitTime: 10 * time.Millisecond,
-			LogToFile:    false,
-		}
-		for _, opt := range opts {
-			opt(o)
-		}
-
-		if o.LogToFile {
-			l, err := newFileLogger(app)
-			if err != nil {
-				return err
-			}
-			app.SetLogger(l)
-		} else {
-			app.SetLogger(zap.MustNewLogger(app))
-		}
-
 		ts, cleanup, err := wireTestingSuite(app)
 		if err != nil {
 			return err
@@ -120,7 +110,15 @@ func buildTestSuite(fn func(ctx context.Context, ts *TestingSuite) error, opts .
 			return nil
 		})
 		return nil
-	}, newTestOptions()...)
+	},
+		// logger 经构造期 provider 注入（v1.16.0 起 SetLogger 移除）：LogToFile
+		// 走文件 logger（test.log-level / test.log-file 配置项），否则 contrib/zap。
+		append(newTestOptions(), lynx.WithLoggerProvider(func(ctx lynx.AppContext) (*slog.Logger, error) {
+			if o.LogToFile {
+				return newFileLogger(ctx)
+			}
+			return zap.MustNewLogger(ctx), nil
+		}))...)
 }
 
 func newTestOptions() []lynx.Option {

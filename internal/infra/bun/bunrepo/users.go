@@ -6,12 +6,12 @@ import (
 	"errors"
 	"time"
 
-	"github.com/lynx-go/lynx-clean-template/internal/domain/users/repo"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/mapper"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/bun/model"
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
-	"github.com/lynx-go/lynx-clean-template/pkg/crud"
-	"github.com/lynx-go/lynx-clean-template/pkg/idgen"
+	"github.com/lynxland/lynx-clean-template/internal/domain/users/repo"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/mapper"
+	"github.com/lynxland/lynx-clean-template/internal/infra/bun/model"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/pkg/crud"
+	"github.com/lynxland/lynx-clean-template/pkg/idgen"
 	"github.com/samber/lo"
 	"github.com/uptrace/bun"
 )
@@ -363,4 +363,3 @@ func (r *UsersRepo) SetSuperAdmin(ctx context.Context, userID idgen.ID, grant bo
 		return err
 	})
 }
-

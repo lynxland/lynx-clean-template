@@ -11,8 +11,8 @@ package apipb
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
-	_ "github.com/lynx-go/grpcapi/genproto/grpcapi/v1"
-	shared "github.com/lynx-go/lynx-clean-template/genproto/shared"
+	_ "github.com/lynxland/grpcapi/genproto/grpcapi/v1"
+	shared "github.com/lynxland/lynx-clean-template/genproto/shared"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -608,7 +608,7 @@ var File_api_v1_auth_proto protoreflect.FileDescriptor
 
 const file_api_v1_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x11api/v1/auth.proto\x12\vlynx.api.v1\x1a\x1bbuf/validate/validate.proto\x1a\x11shared/user.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x16grpcapi/v1/authz.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\xb6\x01\n" +
+	"\x11api/v1/auth.proto\x12\vlynx.api.v1\x1a\x1bbuf/validate/validate.proto\x1a\x11shared/user.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x17grpcapi/v1/policy.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\xb6\x01\n" +
 	"\fTokenRequest\x12\x1d\n" +
 	"\n" +
 	"grant_type\x18\x01 \x01(\tR\tgrantType\x12\x1a\n" +
@@ -650,7 +650,7 @@ const file_api_v1_auth_proto_rawDesc = "" +
 	"\x1cResendSignUpEmailCodeRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\"P\n" +
 	"\x1dResendSignUpEmailCodeResponse\x12/\n" +
-	"\x14next_retry_after_sec\x18\x01 \x01(\x03R\x11nextRetryAfterSec2\xc6\x04\n" +
+	"\x14next_retry_after_sec\x18\x01 \x01(\x03R\x11nextRetryAfterSec2\xd2\x04\n" +
 	"\vAuthService\x12o\n" +
 	"\x05Token\x12\x19.lynx.api.v1.TokenRequest\x1a\x1a.lynx.api.v1.TokenResponse\"/\x92A\x18b\x00j\x14\n" +
 	"\bx-access\x12\b\x1a\x06public\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/token\x12s\n" +
@@ -660,7 +660,8 @@ const file_api_v1_auth_proto_rawDesc = "" +
 	"\x11VerifySignUpEmail\x12%.lynx.api.v1.VerifySignUpEmailRequest\x1a&.lynx.api.v1.VerifySignUpEmailResponse\"6\x92A\x18b\x00j\x14\n" +
 	"\bx-access\x12\b\x1a\x06public\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/verify-email\x12\xab\x01\n" +
 	"\x15ResendSignUpEmailCode\x12).lynx.api.v1.ResendSignUpEmailCodeRequest\x1a*.lynx.api.v1.ResendSignUpEmailCodeResponse\";\x92A\x18b\x00j\x14\n" +
-	"\bx-access\x12\b\x1a\x06public\x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/resend-email-code\x1a\x06\xf2\xc4\x19\x02\b\x01B\xfe\x01\x92A\xbc\x01RJ\n" +
+	"\bx-access\x12\b\x1a\x06public\x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/resend-email-code\x1a\x12\xd2\xf0\x19\x0e\n" +
+	"\x02\x18\x01\x10\x02\x1a\x06publicB\xff\x01\x92A\xbc\x01RJ\n" +
 	"\adefault\x12?\n" +
 	"\x1dAn unexpected error response.\x12\x1e\n" +
 	"\x1c\x1a\x1a.lynx.shared.ErrorResponseZJ\n" +
@@ -669,7 +670,7 @@ const file_api_v1_auth_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
 	"\x06Bearer\x12\x00z\x14\n" +
-	"\bx-access\x12\b\x1a\x06publicZ<github.com/lynx-go/lynx-clean-template/genproto/api/v1;apipbb\x06proto3"
+	"\bx-access\x12\b\x1a\x06publicZ=github.com/lynxland/lynx-clean-template/genproto/api/v1;apipbb\x06proto3"
 
 var (
 	file_api_v1_auth_proto_rawDescOnce sync.Once

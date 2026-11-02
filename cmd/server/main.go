@@ -1,14 +1,15 @@
 package main
 
 import (
+	"log/slog"
 	"time"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/joho/godotenv"
-	"github.com/lynx-go/lynx"
-	config "github.com/lynx-go/lynx-clean-template/internal/pkg/config"
-	"github.com/lynx-go/lynx-clean-template/pkg/timeutil"
-	"github.com/lynx-go/lynx/contrib/zap"
+	"github.com/lynxland/lynx"
+	config "github.com/lynxland/lynx-clean-template/internal/pkg/config"
+	"github.com/lynxland/lynx-clean-template/pkg/timeutil"
+	"github.com/lynxland/lynx/contrib/zap"
 	"github.com/spf13/pflag"
 )
 
@@ -18,8 +19,6 @@ var (
 
 func main() {
 	runner := lynx.NewRunner(func(app lynx.App) error {
-		app.SetLogger(zap.MustNewLogger(app))
-
 		boot, cleanup, err := wireBootstrap(app)
 		if err != nil {
 			return err
@@ -31,6 +30,11 @@ func main() {
 		boot.Apply(app)
 		return nil
 	},
+		// logger 经构造期 provider 注入（v1.16.0 起 SetLogger 移除）：总线及
+		// 配套服务在装配序列内捕获同一 logger，装配期与运行期格式一致。
+		lynx.WithLoggerProvider(func(ctx lynx.AppContext) (*slog.Logger, error) {
+			return zap.MustNewLogger(ctx), nil
+		}),
 		lynx.WithName("lynx-api"),
 		lynx.WithVersion(version),
 		lynx.WithBindFlagsFunc(func(f *pflag.FlagSet) {

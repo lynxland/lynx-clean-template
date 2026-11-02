@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/lynx-go/lynx-clean-template/internal/infra/clients"
+	"github.com/lynxland/lynx-clean-template/internal/infra/clients"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bunotel"
